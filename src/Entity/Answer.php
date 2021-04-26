@@ -32,6 +32,11 @@ class Answer
      */
     private $age;
 
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="answers", cascade={"persist", "remove"})
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,28 @@ class Answer
     public function setAge(int $age): self
     {
         $this->age = $age;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($user === null && $this->user !== null) {
+            $this->user->setAnswers(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($user !== null && $user->getAnswers() !== $this) {
+            $user->setAnswers($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

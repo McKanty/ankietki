@@ -32,6 +32,11 @@ class User
      */
     private $password;
 
+    /**
+     * @ORM\OneToOne(targetEntity=answer::class, inversedBy="user", cascade={"persist", "remove"})
+     */
+    private $answers;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -69,6 +74,18 @@ class User
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getAnswers(): ?answer
+    {
+        return $this->answers;
+    }
+
+    public function setAnswers(?answer $answers): self
+    {
+        $this->answers = $answers;
 
         return $this;
     }
