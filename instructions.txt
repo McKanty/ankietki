@@ -1,0 +1,33 @@
+Mariusz Koniarz
+mkoniarz@gmail.com
+tel: 608559164
+skype: mkoniarz
+
+Instrukcja instalacji.
+
+Założyć pustą bazę danych oraz w razie potrzeby dodać nowego użytkownika z uprawnieniami dla tej bazy
+Wyedytować plik 
+
+.env
+
+w linijce 26 podać dane dostepowe do bazy danych
+DATABASE_URL
+
+zainstalować zależności:
+
+composer install
+
+
+Wykonać założenie tabel w bazie danych:
+
+php bin/console doctrine:migrations:migrate
+
+uruchomić wbudowany serwer www 
+
+symfony server:start
+
+
+lub skonfigurować nowego vhosta 
+
+Gotowe :)
+
