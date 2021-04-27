@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AnswerRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=AnswerRepository::class)
@@ -19,23 +20,32 @@ class Answer
 
     /**
      * @ORM\Column(type="string", length=255)
+	 * @Assert\NotBlank
+	 * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Twoje imię nie może zawierać liczb")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
+	 * @Assert\NotBlank
+	 * @Assert\Regex(
+     *     pattern="/\d/",
+     *     match=false,
+     *     message="Twoje nazwisko nie może zawierać liczb")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="smallint")
+	 * @Assert\Regex(
+     *     pattern="/\d/",
+     *     message="Wiek musi być liczbą")
+	 *
      */
     private $age;
-
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, mappedBy="answers", cascade={"persist", "remove"})
-     */
-    private $user;
 
     public function getId(): ?int
     {
@@ -78,25 +88,5 @@ class Answer
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        // unset the owning side of the relation if necessary
-        if ($user === null && $this->user !== null) {
-            $this->user->setAnswers(null);
-        }
-
-        // set the owning side of the relation if necessary
-        if ($user !== null && $user->getAnswers() !== $this) {
-            $user->setAnswers($this);
-        }
-
-        $this->user = $user;
-
-        return $this;
-    }
+   
 }

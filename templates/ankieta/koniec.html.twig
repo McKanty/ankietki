@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Koniec ankiety{% endblock %}
+
+{% block body %}
+    {% if wypelniono %}
+        Dziekuję za wypełnienie ankiety :)
+    {%  else %}
+        Ankieta została już wypełniona
+    {% endif %}
+{% endblock %}

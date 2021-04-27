@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Twig\Environment;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserController extends AbstractController
  {
@@ -22,12 +23,34 @@ class UserController extends AbstractController
 	#[Route('/', name: 'homepage')]
 
 	public function index(Request $request): Response {
-		$user = new User();
-		$loginForm = $this->createForm(UserFormType::class, $user);
-		$registerForm = $this->createForm(UserFormType::class, $user);
 		return $this->render('user/index.html.twig', [
-            'loginForm' => $loginForm->createView(),
-			'registerForm' => $registerForm->createView(),
 		]);
     }
+
+	#[Route('/reg', name: 'register')]
+
+	public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response {
+		$user = new User();
+		$registerForm = $this->createForm(UserFormType::class, $user);
+
+		$registerForm->handleRequest($request);
+
+		if ($registerForm->isSubmitted() && $registerForm->isValid()) {
+			$user = $registerForm->getData();
+
+			$entityManager = $this->getDoctrine()->getManager();
+			$encoded = $passwordEncoder->encodePassword($user, $user->getPassword());
+			$user->setPassword($encoded);
+			$entityManager->persist($user);
+			$entityManager->flush();
+			$this->addFlash('notice', 'Zostałeś poprawnie zarejestrowany, możesz się teraz zalogować :)');
+
+			return $this->redirectToRoute('app_login');
+		}
+
+		return $this->render('user/register.html.twig', [
+					'registerForm' => $registerForm->createView(),
+		]);
+	}
+
 }

@@ -3,19 +3,27 @@
 {% block title %}Zadanie rekrutacyjne - Użytkownicy{% endblock %}
 
 {% block body %}
-    <div class="jumbotron text-center">
-        <h1>Ankietki</h1>  
-    </div>
-    
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-4">
-                <h3>Logowanie:</h3>
-                
-            </div>
-            <div class="col-sm-8">
-                <h3>Rejestracja:</h3>
-            </div>
+    {% if app.user %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>Przejdź do ankiety:</h3>
+                    <a href="{{ path('ankieta') }}">ankieta</a>
+                </div>            
+            </div>        
         </div>        
-    </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <h3>Logowanie:</h3>
+                    <a href="{{ path('app_login') }}">zaloguj się</a>
+                </div>
+                <div class="col-sm-8">
+                    <h3>Rejestracja:</h3>
+                    <a href="{{ path('register') }}">zarejestruj się</a>
+                </div>
+            </div>        
+        </div>
+    {% endif %}    
 {% endblock %}

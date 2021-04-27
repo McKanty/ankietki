@@ -3,8 +3,10 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use App\Entity\Answer;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -19,6 +21,10 @@ class User implements UserInterface {
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
+	 * @Assert\NotBlank
+	 * @Assert\Email(
+     *     message = "Podany adres email '{{ value }}' jest nieprawidłowy."
+     * )
      */
     private $email;
 
@@ -29,11 +35,16 @@ class User implements UserInterface {
 
 	/**
      * @ORM\Column(type="string", length=255)
+	 * @Assert\NotBlank
+	 * @Assert\Regex(
+     *     pattern="/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$/",
+     *     message="Hasło musi zawierać minimum 8 znaków, co najmniej jedną dużą literę, co najmniej jedną małą literę, cyfrę i znak specjalny.")
      */
     private $password;
 
     /**
-     * @ORM\OneToOne(targetEntity=answer::class, inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Answer::class)
+	 * @ORM\JoinColumn(name="answer_id", referencedColumnName="id")
      */
     private $answers;
 

@@ -17,6 +17,19 @@
         {% endblock %}
     </head>
     <body>
+        <div class="jumbotron text-center">
+            <h1>Ankietki</h1>  
+        </div>
+        {% if app.user %}
+            <div class="mb-3">
+                Jesteś zalogowany jako {{ app.user.username }}, <a href="{{ path('app_logout') }}">wyloguj</a>
+            </div>
+        {% endif %}
+        {% for message in app.flashes('notice') %}
+            <div class="flash-notice">
+                {{ message }}
+            </div>
+        {% endfor %}
         {% block body %}{% endblock %}
         <hr/>
         <div class="container">
